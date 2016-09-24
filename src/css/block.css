@@ -1,0 +1,16 @@
+/*
+此样式用于屏蔽广告。因为js代码运行速度太慢，为了尽可能的快速屏蔽，先在样式中默认屏蔽广告，再在js代码中判断是否需要显示
+*/
+.img_wrap,
+.firework-wrap,
+.tbui_aside_float_bar,
+.topic_list_box,
+#video_frs_head,
+.my_app,
+.celebrity,
+#pagelet_frs-header\/pagelet\/head_content_middle,
+.head_ad_pop,
+.iframe_wrapper,
+.thread_recommend {
+    display: none !important;
+}

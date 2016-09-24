@@ -1,0 +1,33 @@
+//此样式用于修改vue-carbon的默认样式，原因['无法在scoped组件上更改样式', '人懒不想重新编译vue-carbon']
+@import "./color";
+@import "./common";
+
+body, html {
+    min-height: 533px !important;
+
+    background-color: $background !important;
+}
+
+//修改tab指示器颜色
+.vc-tab-link-highlight {
+    background: $background !important;
+}
+
+//修改list项顶部分割线颜色
+.vc-list:before {
+    background-color: $background !important;
+}
+
+//修改list标题字体大小
+.vc-item-title {
+    font-size: 14px !important;
+}
+
+//修改switch的颜色 
+.vc-switch input[type=checkbox]:checked+.vc-switch-checkbox, .vc-switch input[type=checkbox]:checked+.vc-switch-label+.vc-switch-checkbox {
+    background: transparentize($primary-color, 0.5) !important;
+}
+
+.vc-switch input[type=checkbox]:checked+.vc-switch-checkbox:after, .vc-switch input[type=checkbox]:checked+.vc-switch-label+.vc-switch-checkbox:after {
+    background: $primary-color;
+}
