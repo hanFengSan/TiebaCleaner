@@ -5,12 +5,12 @@ chrome扩展，主要功能：屏蔽百度广告，拉黑百度用户。屏蔽�
 代码上，大致用了``webpack+vue+sass``，也掺和了一些的``jQuery``。主要还是对js在操作样式上有了更深一步的了解。
 
 ## 界面/效果预览
-<img src="https://github.com/hanFengSan/BilibiliCleaner/blob/master/image/preview-1.jpg"/>
-<img src="https://github.com/hanFengSan/BilibiliCleaner/blob/master/image/preview-2.jpg" width="400px"/>
-<img src="https://github.com/hanFengSan/BilibiliCleaner/blob/master/image/preview-3.jpg" width="400px"/>
-<img src="https://github.com/hanFengSan/BilibiliCleaner/blob/master/image/preview-4.jpg" width="400px"/>
-<img src="https://github.com/hanFengSan/BilibiliCleaner/blob/master/image/preview-5.jpg" width="400px"/>
-<img src="https://github.com/hanFengSan/BilibiliCleaner/blob/master/image/preview-6.jpg" width="400px"/>
+<img src="https://github.com/hanFengSan/TiebaCleaner/blob/master/image/preview-1.jpg"/>
+<img src="https://github.com/hanFengSan/TiebaCleaner/blob/master/image/preview-2.jpg" width="400px"/>
+<img src="https://github.com/hanFengSan/TiebaCleaner/blob/master/image/preview-3.jpg" width="400px"/>
+<img src="https://github.com/hanFengSan/TiebaCleaner/blob/master/image/preview-4.jpg" width="400px"/>
+<img src="https://github.com/hanFengSan/TiebaCleaner/blob/master/image/preview-5.jpg" width="400px"/>
+<img src="https://github.com/hanFengSan/TiebaCleaner/blob/master/image/preview-6.jpg" width="400px"/>
 
 ## 用户使用说明
 [chrome webstore 下载地址](https://chrome.google.com/webstore/detail/%E8%B4%B4%E5%90%A7%E6%B8%85%E6%B4%81%E8%80%85/ffnpdhifpelckhfkhnamdpimbleanpom/)
