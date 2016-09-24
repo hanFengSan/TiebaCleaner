@@ -7,7 +7,6 @@ chrome扩展，主要功能：屏蔽百度广告，拉黑百度用户。屏蔽�
 ## 界面/效果预览
 <img src="https://github.com/hanFengSan/TiebaCleaner/blob/master/image/preview-1.jpg"/>
 <img src="https://github.com/hanFengSan/TiebaCleaner/blob/master/image/preview-2.jpg" width="400px"/>
-<img src="https://github.com/hanFengSan/TiebaCleaner/blob/master/image/preview-3.jpg" width="400px"/>
 <img src="https://github.com/hanFengSan/TiebaCleaner/blob/master/image/preview-4.jpg" width="400px"/>
 <img src="https://github.com/hanFengSan/TiebaCleaner/blob/master/image/preview-5.jpg" width="400px"/>
 <img src="https://github.com/hanFengSan/TiebaCleaner/blob/master/image/preview-6.jpg" width="400px"/>
