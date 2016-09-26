@@ -1,5 +1,15 @@
 class Cleaner {
-  constructor () {}
+  constructor () {
+    console.log('yakami constructor')
+    this.homeCycleFunc = []
+    this.postCycleFunc = []
+    this.blockList = []
+    this.isSetted = false // 避免重复配置
+    // 启动首页循环
+    this.homeCycle()
+    // 启动帖子循环
+    this.postCycle()
+  }
 
   toString () {
     console.log('Cleaner')
@@ -36,32 +46,104 @@ class Cleaner {
           this.cleanToast(item.value)
           break
         case '屏蔽广告贴':
-          this.cleanAdPost(item.value)
+          if (!this.isSetted)
+            this.cleanAdPost(item.value)
           break
         case '屏蔽猜你感兴趣':
           this.cleanInteresting(item.value)
           break
         case '屏蔽视频贴':
-          this.cleanVideoPost(item.value)
+          if (!this.isSetted)
+            this.cleanVideoPost(item.value)
           break
         case '屏蔽回复中的广告':
-          this.cleanReplyAd(item.value)
+          if (!this.isSetted)
+            this.cleanReplyAd(item.value)
           break
         case '屏蔽相关推荐':
           this.cleanRecommand(item.value)
           break
       }
     }
+    if (!this.isSetted)
+      this.blockUser()
+
+    this.isSetted = true
   }
 
-  defaultClean () {
-    this.cleanSearchRightAd(true)
-    this.cleanSalute(true)
+  defaultClean () {}
+
+  // 主页检测变动循环
+  homeCycle () {
+    let parent = this
+    let threadListLen = 0 // 用于判断dom是否改变
+    let find = function () {
+      let len = $('#thread_list').text().length
+      // dom是否更改，此节点发生更改则表示换页了
+      if (len == threadListLen)
+        return
+      threadListLen = len
+      for (let func of parent.homeCycleFunc) {
+        func()
+      }
+
+      if (!window.location.href.includes('http://tieba.baidu.com/f'))
+        clearInterval(finder)
+    }
+    let finder
+    if (window.location.href.includes('http://tieba.baidu.com/f'))
+      finder = setInterval(find, 250)
+  }
+
+  // 帖子检测变动循环
+  postCycle () {
+    let parent = this
+    let postListLen = 0 // 用于判断dom是否改变
+    let find = function () {
+      let len = $('#j_p_postlist').text().length
+      // dom是否更改，此节点发生更改则表示换页了
+      if (len == postListLen)
+        return
+      postListLen = len
+      for (let func of parent.postCycleFunc) {
+        func()
+      }
+
+      if (!window.location.href.includes('http://tieba.baidu.com/p'))
+        clearInterval(finder)
+    }
+    let finder
+    if (window.location.href.includes('http://tieba.baidu.com/p'))
+      finder = setInterval(find, 250)
+  }
+
+  blockUser () {
+    let parent = this
+    this.postCycleFunc.push(function () {
+      parent.blockList.forEach(function (item) {
+        // 清理楼层
+        for (let name of $('.p_author_name')) {
+          if (name.innerHTML.trim() == item) {
+            let node = name.parentNode.parentNode.parentNode.parentNode
+            node.parentNode.removeChild(node)
+          }
+        }
+        // 清理楼中楼
+        for (let replayItem of $('.j_user_card')) {
+          if (replayItem.innerHTML.trim() == item) {
+            let node = replayItem.parentNode.parentNode
+            node.parentNode.removeChild(node)
+          }
+        }
+      })
+    })
   }
 
   cleanSearchRightAd (isRemoved) {
-    if (isRemoved)
+    if (isRemoved) {
       $('.img_wrap').css('display', 'none', 'important')
+      $('.hover_btn').parent().parent().parent().remove() // 删除左边浮动广告
+    }
     else
       $('.img_wrap').css('cssText', 'display: block !important;') // 需要明确指定，否则有些会不起效
   }
@@ -124,7 +206,7 @@ class Cleaner {
 
   cleanAdPost (isRemoved) {
     if (isRemoved) {
-      let find = function () {
+      this.homeCycleFunc.push(function () {
         let list = $('.threadlist_rep_num')
         if (list.length > 0) {
           for (let item of list) {
@@ -133,12 +215,8 @@ class Cleaner {
               itemNode.parentNode.removeChild(itemNode)
             }
           }
-          clearInterval(finder)
         }
-      }
-      let finder
-      if (window.location.href.includes('http://tieba.baidu.com/f'))
-        finder = setInterval(find, 250)
+      })
     }
   }
 
@@ -151,22 +229,18 @@ class Cleaner {
 
   cleanVideoPost (isRemoved) {
     if (isRemoved) {
-      let find = function () {
+      this.homeCycleFunc.push(function () {
         let list = $('.threadlist_rep_num')
         if (list.length > 0) {
           $('.threadlist_video').parent().parents('li').remove()
-          clearInterval(finder)
         }
-      }
-      let finder
-      if (window.location.href.includes('http://tieba.baidu.com/f'))
-        finder = setInterval(find, 250)
+      })
     }
   }
 
   cleanReplyAd (isRemoved) {
     if (isRemoved) {
-      let find = function () {
+      this.postCycleFunc.push(function () {
         if ($('.l_post').length > 0) {
           for (let item of $('.core_reply')) {
             if (item.innerHTML.includes('广告')) {
@@ -174,12 +248,8 @@ class Cleaner {
               itemNode.parentNode.removeChild(itemNode)
             }
           }
-          clearInterval(finder)
         }
-      }
-      let finder
-      if (window.location.href.includes('http://tieba.baidu.com/p'))
-        finder = setInterval(find, 250)
+      })
     }
   }
 

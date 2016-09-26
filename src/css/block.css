@@ -11,6 +11,7 @@
 #pagelet_frs-header\/pagelet\/head_content_middle,
 .head_ad_pop,
 .iframe_wrapper,
-.thread_recommend {
+.thread_recommend,
+.hover_btn {
     display: none !important;
 }
