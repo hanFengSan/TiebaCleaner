@@ -4,8 +4,8 @@
   "description": "",
   "main": "jquery.min.js",
   "scripts": {
-    "start": "webpack-dev-server --progress",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "webpack",
+    "test": "webpack --watch"
   },
   "author": "",
   "license": "ISC",

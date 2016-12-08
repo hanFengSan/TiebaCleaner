@@ -22,7 +22,7 @@ npm install
 ```
 先解决依赖，需要``node``环境。
 ```
-webpack
+npm start
 ```
 如上，即可完成编译，然后在chrome://extensions中勾选``开发者模式``，再选择``已解压的扩展程序``，选择此根目录，即加载成功。
 

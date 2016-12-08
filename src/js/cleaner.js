@@ -242,9 +242,9 @@ class Cleaner {
     if (isRemoved) {
       this.postCycleFunc.push(function () {
         if ($('.l_post').length > 0) {
-          for (let item of $('.core_reply')) {
+          for (let item of $('.core_reply_tail')) {
             if (item.innerHTML.includes('广告')) {
-              let itemNode = item.parentNode.parentNode
+              let itemNode = item.parentNode.parentNode.parentNode
               itemNode.parentNode.removeChild(itemNode)
             }
           }

@@ -15,3 +15,47 @@
 .hover_btn {
     display: none !important;
 }
+
+
+.search_main_fixed {
+	background-color: rgb(52, 152, 219) !important;
+	box-shadow: rgba(0, 0, 0, 0.137255) 0px 2px 2px 0px, rgba(0, 0, 0, 0.117647) 0px 1px 5px 0px, rgba(0, 0, 0, 0.2) 0px 3px 1px -2px !important;
+	border-bottom: 0 !important;
+}
+
+.search_main_fixed > search_form_fixed {
+	padding-top: 12px !important;
+}
+
+#search_logo_small {
+	background: url(http://tb2.bdstatic.com/tb/img/search_logo_small_342bc2a.png) no-repeat 0 0 !important;
+	-webkit-filter: brightness(0) invert(1);
+	filter: brightness(0) invert(1);
+	visibility: hidden !important;
+}
+
+.senior-search-link {
+	color: white !important;
+	margin-top: 3.5px !important;
+}
+
+.search_btn_fixed {
+	background-image: url('') !important;
+}
+
+.search_btn_fixed {
+	color: white !important;
+	margin-left: 0 !important;
+	box-shadow: 0 !important;
+	border: 0 !important;
+}
+
+.search_ipt_fixed {
+	background: transparent !important;
+	color: white !important;
+	border-bottom: 1px solid rgba(255, 255, 255, 100) !important;
+}
+
+
+
+
