@@ -210,7 +210,7 @@ class Cleaner {
         let list = $('.threadlist_rep_num')
         if (list.length > 0) {
           for (let item of list) {
-            if (item.innerHTML == '广告') {
+            if (item.innerHTML == '广告' || item.innerHTML == '热门') {
               let itemNode = item.parentNode.parentNode.parentNode
               itemNode.parentNode.removeChild(itemNode)
             }
@@ -245,6 +245,12 @@ class Cleaner {
           for (let item of $('.core_reply_tail')) {
             if (item.innerHTML.includes('广告')) {
               let itemNode = item.parentNode.parentNode.parentNode
+              itemNode.parentNode.removeChild(itemNode)
+            }
+          }
+          for (let item of $('.core_reply')) {
+            if (item.innerHTML.includes('<span class="label_text">广告</span>')) {
+              let itemNode = item.parentNode.parentNode
               itemNode.parentNode.removeChild(itemNode)
             }
           }
