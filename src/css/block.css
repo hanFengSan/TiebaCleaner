@@ -13,13 +13,18 @@
 .iframe_wrapper,
 .novel-ranking-frs-body, /*百度小说人气榜*/
 .thread_recommend,
+#video_aside, /*视频推荐*/
+#tieba-notice, /*贴吧警示*/
+.plat_head_v2_unmain_wrapper, /*b吧头*/
+.u9_aside, /*热门卡包*/
+#duoku_servers_list_wrapper, /*游戏列表*/
 .hover_btn {
     display: none !important;
 }
 
 
 /* toolbar 美化 start*/
-.search_main_fixed {
+/*.search_main_fixed {
 	background-color: rgb(52, 152, 219) !important;
 	box-shadow: rgba(0, 0, 0, 0.137255) 0px 2px 2px 0px, rgba(0, 0, 0, 0.117647) 0px 1px 5px 0px, rgba(0, 0, 0, 0.2) 0px 3px 1px -2px !important;
 	border-bottom: 0 !important;
@@ -65,7 +70,7 @@
 .senior-search-link {
 	font-size:12px !important;
 	text-decoration: none !important;
-}
+}*/
 /* toolbar 美化 end*/
 
 

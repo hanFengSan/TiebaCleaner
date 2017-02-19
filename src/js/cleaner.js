@@ -65,8 +65,10 @@ class Cleaner {
           break
       }
     }
-    if (!this.isSetted)
+    if (!this.isSetted) {
       this.blockUser()
+      this.cleanBlockedPoster()
+    }
 
     this.isSetted = true
   }
@@ -265,6 +267,23 @@ class Cleaner {
     else
       $('.thread_recommend').css('cssText', 'display: block !important;')
   }
+
+  cleanBlockedPoster() {
+      let parent = this
+      this.homeCycleFunc.push(function () {
+        let list = document.getElementsByClassName('frs-author-name-wrap')
+        if (list.length > 0) {
+          for (let item of list) {
+            parent.blockList.forEach(function (user) {
+              if (user === item.textContent) {
+                let itemNode = item.parentNode.parentNode.parentNode.parentNode.parentNode
+                itemNode.parentNode.removeChild(itemNode)
+              }
+            })
+          }
+        }
+      })
+    }
 }
 
 export default Cleaner
