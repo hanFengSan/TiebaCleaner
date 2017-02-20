@@ -1,6 +1,6 @@
 class Cleaner {
   constructor () {
-    console.log('yakami constructor')
+    console.log('TiebaCleaner constructed')
     this.homeCycleFunc = []
     this.postCycleFunc = []
     this.blockList = []
@@ -89,11 +89,11 @@ class Cleaner {
         func()
       }
 
-      if (!window.location.href.includes('http://tieba.baidu.com/f'))
+      if (!window.location.href.includes('tieba.baidu.com/f'))
         clearInterval(finder)
     }
     let finder
-    if (window.location.href.includes('http://tieba.baidu.com/f'))
+    if (window.location.href.includes('tieba.baidu.com/f'))
       finder = setInterval(find, 250)
   }
 
@@ -111,11 +111,11 @@ class Cleaner {
         func()
       }
 
-      if (!window.location.href.includes('http://tieba.baidu.com/p'))
+      if (!window.location.href.includes('tieba.baidu.com/p'))
         clearInterval(finder)
     }
     let finder
-    if (window.location.href.includes('http://tieba.baidu.com/p'))
+    if (window.location.href.includes('tieba.baidu.com/p'))
       finder = setInterval(find, 250)
   }
 
