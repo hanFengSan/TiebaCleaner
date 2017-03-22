@@ -4,7 +4,7 @@ class Cleaner {
     this.homeCycleFunc = []
     this.postCycleFunc = []
     this.blockList = []
-    this.isSetted = false // 避免重复配置
+    this.isSet = false // 避免重复配置
     // 启动首页循环
     this.homeCycle()
     // 启动帖子循环
@@ -46,18 +46,18 @@ class Cleaner {
           this.cleanToast(item.value)
           break
         case '屏蔽广告贴':
-          if (!this.isSetted)
+          if (!this.isSet)
             this.cleanAdPost(item.value)
           break
         case '屏蔽猜你感兴趣':
           this.cleanInteresting(item.value)
           break
         case '屏蔽视频贴':
-          if (!this.isSetted)
+          if (!this.isSet)
             this.cleanVideoPost(item.value)
           break
         case '屏蔽回复中的广告':
-          if (!this.isSetted)
+          if (!this.isSet)
             this.cleanReplyAd(item.value)
           break
         case '屏蔽相关推荐':
@@ -65,12 +65,12 @@ class Cleaner {
           break
       }
     }
-    if (!this.isSetted) {
+    if (!this.isSet) {
       this.blockUser()
       this.cleanBlockedPoster()
     }
 
-    this.isSetted = true
+    this.isSet = true
   }
 
   defaultClean () {}
@@ -122,22 +122,23 @@ class Cleaner {
   blockUser () {
     let parent = this
     this.postCycleFunc.push(function () {
-      parent.blockList.forEach(function (item) {
-        // 清理楼层
-        for (let name of $('.p_author_name')) {
-          if (name.innerHTML.trim() == item) {
-            let node = name.parentNode.parentNode.parentNode.parentNode
-            node.parentNode.removeChild(node)
-          }
+      const blockMap = new Map(parent.blockList.map(i => {
+          return [i, true]
+      })) 
+      // 清理楼层
+      for (let name of $('.p_author_name')) {
+        if (blockMap.get(name.innerHTML.trim())) {
+          let node = name.parentNode.parentNode.parentNode.parentNode
+          node.parentNode.removeChild(node)
         }
-        // 清理楼中楼
-        for (let replayItem of $('.j_user_card')) {
-          if (replayItem.innerHTML.trim() == item) {
-            let node = replayItem.parentNode.parentNode
-            node.parentNode.removeChild(node)
-          }
+      }
+      // 清理楼中楼
+      for (let replayItem of $('.j_user_card')) {
+        if (blockMap.get(replayItem.innerHTML.trim())) {
+          let node = replayItem.parentNode.parentNode
+          node.parentNode.removeChild(node)
         }
-      })
+      }
     })
   }
 
