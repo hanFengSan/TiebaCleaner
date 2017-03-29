@@ -206,3 +206,5 @@ var getUrlParameter = function getUrlParameter(sParam) {
         }
     }
 };
+
+export default {};

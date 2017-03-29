@@ -1,5 +1,6 @@
 // 此部分代码将会注入到贴吧页面中
 import Cleaner from './cleaner'
+import Utils from './utils.js'
 
 var blockList = [] // 屏蔽列表
 var html = document.documentElement.innerHTML // 用于检查是否需要刷新

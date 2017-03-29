@@ -5,15 +5,21 @@ const path = require('path')
 const srcPath = './src'
 const buildPath = '/build'
 
+function resolve(dir) {
+    return path.join(__dirname, '..', dir)
+}
+
 module.exports = {
+    watch: true,
+    
     devtool: 'eval-source-map',
 
     entry: {
-        main: __dirname + '/src/js/main.js',
-        popup: __dirname + '/src/js/popup.js'
+        main:  '../src/js/main.js',
+        popup: '../src/js/popup.js'
     },
     output: {
-        path: __dirname + buildPath,
+        path: path.resolve(__dirname, '../dist'),
         filename: '[name].js'
     },
 
@@ -88,10 +94,10 @@ module.exports = {
     plugins: [
         new HtmlWebpackPlugin({
             filename: 'popup.html',
-            template: __dirname + '/src/popup.tmpl.html',
+            template:  resolve('src/popup.tmpl.html'),
             excludeChunks: ['main']
         }),
-        new ExtractTextPlugin('[name].css'),
+        // new ExtractTextPlugin('[name].css'),
         new webpack.ProvidePlugin({
             $: 'jquery',
             jQuery: 'jquery'

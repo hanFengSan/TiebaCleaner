@@ -2,10 +2,10 @@
     "manifest_version": 2,
     "name": "贴吧清洁者",
     "description": "为贴吧的环境清洁做点微小的工作，屏蔽贴吧广告，拉黑用户, 贴吧简洁化",
-    "version": "1.4.1",
+    "version": "1.5.0",
     "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'",
     "browser_action": {
-        "default_popup": "./build/popup.html",
+        "default_popup": "popup.html",
         "default_title": "贴吧清洁者"
     },
     "icons": {
@@ -23,13 +23,11 @@
             "*://tieba.baidu.com/*"
         ],
         "js": [
-            "./src/js/utils.js",
-            "./build/main.js"
+            "main.js"
         ],
         "css": [
-            "./src/css/block.css"
+            "preBlock.css"
         ],
-        "run_at": "document_end",
-        "all_frames": true
+        "run_at": "document_start"
     }]
 }

@@ -4,8 +4,9 @@
   "description": "",
   "main": "jquery.min.js",
   "scripts": {
-    "start": "webpack",
-    "test": "webpack --watch"
+    "dev": "gulp dev --gulpfile build/gulpfile.js",
+    "build": "gulp build --gulpfile build/gulpfile.js",
+    "publish": "gulp publish --gulpfile build/gulpfile.js"
   },
   "author": "",
   "license": "ISC",
@@ -45,8 +46,13 @@
     "webpack-dev-server": "^1.15.1"
   },
   "dependencies": {
+    "del": "^2.2.2",
+    "gulp": "^3.9.1",
+    "gulp-util": "^3.0.8",
     "vue": "^1.0.26",
     "vue-carbon": "^0.4.2",
-    "vuex": "^1.0.0-rc.2"
+    "vuex": "^1.0.0-rc.2",
+    "web-ext": "^1.8.1",
+    "webpack-stream": "^3.2.0"
   }
 }

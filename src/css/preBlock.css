@@ -24,6 +24,8 @@
 .app_iframe, /*百度小说贴吧吧顶部的最新排行,捧场动态, 读者贡献榜*/
 .live_show_aside, /*宅男杀手*/
 .app_forum_top_nav_join_vip, /*会员官网*/
+#global_notice_wrap, /*底部通知条*/
+#pop_frame, /*右下通知框*/
 .hover_btn {
     display: none !important;
 }
