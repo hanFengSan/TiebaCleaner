@@ -29,6 +29,8 @@
 .app_forum_top_nav_join_vip, /*会员官网*/
 #global_notice_wrap, /*底部通知条*/
 #pop_frame, /*右下通知框*/
+.gift-goin, /*贴吧头图右侧礼物icon*/
+.app_download_box, /*贴吧客户端下载*/
 .hover_btn {
     display: none !important;
 }

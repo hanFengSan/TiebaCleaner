@@ -11,10 +11,11 @@ chrome扩展，主要功能：屏蔽百度广告，拉黑百度用户。屏蔽�
 
 ## 界面/效果预览
 <img src="https://github.com/hanFengSan/TiebaCleaner/blob/master/image/preview-1.jpg"/>
-<img src="https://github.com/hanFengSan/TiebaCleaner/blob/master/image/preview-2.jpg" width="400px"/>
-<img src="https://github.com/hanFengSan/TiebaCleaner/blob/master/image/preview-4.jpg" width="400px"/>
-<img src="https://github.com/hanFengSan/TiebaCleaner/blob/master/image/preview-5.jpg" width="400px"/>
-<img src="https://github.com/hanFengSan/TiebaCleaner/blob/master/image/preview-6.jpg" width="400px"/>
+<img src="https://github.com/hanFengSan/TiebaCleaner/blob/master/image/preview-2.jpg" style="width: 400px; display: inline-block; padding: 10px;"/>
+<img src="https://github.com/hanFengSan/TiebaCleaner/blob/master/image/preview-4.jpg" style="width: 400px; display: inline-block; padding: 10px;"/>
+<img src="https://github.com/hanFengSan/TiebaCleaner/blob/master/image/preview-5.jpg" style="width: 400px; display: inline-block; padding: 10px;"/>
+<img src="https://github.com/hanFengSan/TiebaCleaner/blob/master/image/preview-6.jpg" style="width: 400px; display: inline-block; padding: 10px;"/>
+<img src="https://github.com/hanFengSan/TiebaCleaner/blob/master/image/preview-7.jpg" style="width: 400px; display: inline-block; padding: 10px;"/>
 
 ## 用户使用说明
 [chrome webstore 下载地址](https://chrome.google.com/webstore/detail/%E8%B4%B4%E5%90%A7%E6%B8%85%E6%B4%81%E8%80%85/ffnpdhifpelckhfkhnamdpimbleanpom/)
