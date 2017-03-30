@@ -26,21 +26,6 @@ npm start
 ```
 如上，即可完成编译，然后在chrome://extensions中勾选``开发者模式``，再选择``已解压的扩展程序``，选择此根目录，即加载成功。
 
-
-
-
-# License
-
-    Copyright (C) 2016 hanFengSan
-
-    Licensed under the Apache License, Version 2.0 (the "License");
-    you may not use this file except in compliance with the License.
-    You may obtain a copy of the License at
-
-        http://www.apache.org/licenses/LICENSE-2.0
-
-    Unless required by applicable law or agreed to in writing, software
-    distributed under the License is distributed on an "AS IS" BASIS,
-    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-    See the License for the specific language governing permissions and
-    limitations under the License.
+## TODO-LIST
+* 在document未渲染修改html代码, 废除广告添加逻辑以及屏蔽用户帖子
+* 添加过渡动画
