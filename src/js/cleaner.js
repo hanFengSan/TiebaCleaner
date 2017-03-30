@@ -3,8 +3,9 @@ import HtmlParser from 'htmlparser2'
 class Cleaner {
     constructor() {
         console.log('TiebaCleaner constructed')
-        this.homeCycleFuncs = []
-        this.postCycleFuncs = []
+        this.homeCycleFuncs = [] // 主页帖子列表处理方法队列
+        this.postCycleFuncs = [] // 楼处理方法队列
+        this.replyCycleFuncs = [] // 楼中楼处理方法队列
         this.blockList = []
         this.isSet = false // 避免重复配置
         // 启动首页循环
@@ -63,13 +64,15 @@ class Cleaner {
                         this.cleanReplyAd(item.value)
                     break
                 case '屏蔽相关推荐':
-                    this.cleanRecommand(item.value)
+                    this.cleanRecommend(item.value)
                     break
             }
         }
         if (!this.isSet) {
-            this.blockUser()
-            this.cleanBlockedPoster()
+            this.blockUserInPoster()
+            this.blockUserInPost()
+            this.blockUserInReply()
+            this.addBlockButton()
         }
 
         this.isSet = true
@@ -83,64 +86,40 @@ class Cleaner {
             this.asyncQueryNode('#pagelet_frs-list\\/pagelet\\/thread')
                 .then((threadList) => {
                     if (threadList) {
-                        console.log('start homeCycle');
-                        const clean = () => this.homeCycleFuncs.forEach(func => func());
-                        const observe = mo => mo.observe(threadList, { childList: true, subtree: true });
+                        const clean = () => this.homeCycleFuncs.forEach(func => func())
+                        const observe = mo => mo.observe(threadList, { childList: true, subtree: true })
                         const observer = new MutationObserver((records, mo) => {
-                            console.log('homeCycle');
-                            mo.disconnect();
-                            clean();
-                            observe(mo);
+                            mo.disconnect()
+                            clean()
+                            observe(mo)
                         });
-                        observe(observer);
+                        observe(observer)
                         clean();
                     }
                 });
         }
     }
 
+    // DOMContentLoaded和load事件都不能最快的获取node, 遂暴力循环
     asyncQueryNode(selector, isAll) {
+        const time = 50;
+        const maxRetryTimes = 100;
         return new Promise((resolve, reject) => {
             let result = null;
             let i = 0;
             let timer = window.setInterval(() => {
                 result = isAll ? document.querySelectorAll(selector) : document.querySelector(selector);
-                console.log(`find ${selector}`)
                 if (result) {
-                    console.log(`found ${selector}`)
                     window.clearInterval(timer);
                     resolve(result);
                 }
                 i++;
-                if (i > 100) {
-                    console.log(`get ${selector} failed`);
+                if (i === maxRetryTimes - 1) {
                     window.clearInterval(timer);
                     resolve(null);
                 }
-            }, 50);
+            }, time);
         });
-    }
-
-    // 帖子检测变动循环
-    _postCycle() {
-        let parent = this
-        let postListLen = 0 // 用于判断dom是否改变
-        let find = function () {
-            let len = $('#j_p_postlist').text().length
-            // dom是否更改，此节点发生更改则表示换页了
-            if (len == postListLen)
-                return
-            postListLen = len
-            for (let func of parent.postCycleFuncs) {
-                func()
-            }
-
-            if (!window.location.href.includes('tieba.baidu.com/p'))
-                clearInterval(finder)
-        }
-        let finder
-        if (window.location.href.includes('tieba.baidu.com/p'))
-            finder = setInterval(find, 250)
     }
 
     // 帖子检测变动循环
@@ -148,21 +127,48 @@ class Cleaner {
         if (window.location.href.includes('tieba.baidu.com/p')) {
             this.asyncQueryNode('#j_p_postlist')
                 .then((postList) => {
-                    console.log('start postCycle');
                     if (postList) {
-                        const clean = () => this.postCycleFuncs.forEach(func => func());
-                        const observe = mo => mo.observe(postList, { childList: true, subtree: true });
+                        const clean = () => this.postCycleFuncs.forEach(func => func())
+                        const observe = mo => mo.observe(postList, { childList: true })
                         const observer = new MutationObserver((records, mo) => {
-                            console.log('postCycle');
-                            mo.disconnect();
-                            clean();
-                            observe(mo);
+                            mo.disconnect()
+                            clean()
+                            this.watchPostItem()
+                            observe(mo)
                         });
-                        observe(observer);
-                        clean();
+                        observe(observer)
+                        clean()
                     }
                 });
         }
+    }
+
+    // 监听帖子单个回复节点
+    watchPostItem() {
+        const postItemList = document.querySelectorAll('.l_post')
+        // 监听楼中楼
+        postItemList.forEach(item => {
+            if(!item.hasAttribute('cleaner-watch')) {
+                const clean = () => this.replyCycleFuncs.forEach(func => func(item))
+                const observe = mo => mo.observe(item, { childList: true, subtree: true })
+                let timer = null
+                const observer = new MutationObserver((records, mo) => {
+                    // 通过判断mutation里的特定楼中楼插入/更新关键词来过滤出关键操作
+                    if (records.find(r => {
+                         return Array.prototype.slice.call(r.addedNodes, 0).find(i => { 
+                             return (i.innerText && i.innerText.match(/回复[\s\S]*?我也说一句/g)) || (i.innerHTML && i.innerHTML.match(/^<a name/g))  
+                            })
+                        })) {
+                        mo.disconnect()
+                        clean()
+                        observe(mo)
+                    }
+                });
+                observe(observer)
+                clean();
+                item.setAttribute('cleaner-watch', '')
+            }
+        });
     }
 
     hideNode(node, text) {
@@ -178,11 +184,28 @@ class Cleaner {
             window.setTimeout(() => {
                 node.style.maxHeight = '0'
             }, 0)
-            console.log('hide one')
         }
     }
 
-    blockUser() {
+    // 屏蔽用户发表的帖子
+    blockUserInPoster() {
+        this.homeCycleFuncs.push(() => {
+            const blockMap = new Map(this.blockList.map(i => {
+                return [i, true]
+            }))
+            let list = document.getElementsByClassName('frs-author-name-wrap')
+            if (list.length > 0) {
+                for (let item of list) {
+                    if (blockMap.get((item.textContent))) {
+                        this.hideNode(item.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode, 'blocked-list-user')
+                    }
+                }
+            }
+        })
+    }
+
+    // 屏蔽用户回复
+    blockUserInPost() {
         this.postCycleFuncs.push(() => {
             const blockMap = new Map(this.blockList.map(i => {
                 return [i, true]
@@ -191,16 +214,23 @@ class Cleaner {
             for (let name of document.querySelectorAll('.p_author_name')) {
                 if (blockMap.get(name.innerHTML.trim())) {
                     let node = name.parentNode.parentNode.parentNode.parentNode
-                    node.parentNode.removeChild(node)
-                    this.hideNode(name.parentNode.parentNode.parentNode.parentNode, 'blocked-user')
+                    this.hideNode(name.parentNode.parentNode.parentNode.parentNode, 'blocked-post-user')
                 }
             }
+        })
+    }
+
+    // 屏蔽楼中楼用户
+    blockUserInReply() {
+        this.replyCycleFuncs.push((node) => {
+            const blockMap = new Map(this.blockList.map(i => {
+                return [i, true]
+            }))
             // 清理楼中楼
-            for (let replayItem of document.querySelectorAll('.j_user_card')) {
+            for (let replayItem of node.querySelectorAll('.j_user_card')) {
                 if (blockMap.get(replayItem.innerHTML.trim())) {
                     let node = replayItem.parentNode.parentNode
-                    node.parentNode.removeChild(node)
-                    this.hideNode(replayItem.parentNode.parentNode, 'blocked-user-replay')
+                    this.hideNode(replayItem.parentNode.parentNode, 'blocked-replay-user')
                 }
             }
         })
@@ -309,13 +339,11 @@ class Cleaner {
                 if ($('.l_post').length > 0) {
                     for (let item of $('.core_reply_tail')) {
                         if (item.innerHTML.includes('广告')) {
-                            console.log('clean an ad1')
                             this.hideNode(item.parentNode.parentNode.parentNode)
                         }
                     }
                     for (let item of $('.core_reply')) {
                         if (item.innerHTML.includes('<span class="label_text">广告</span>')) {
-                            console.log('clean an ad2')
                             this.hideNode(item.parentNode.parentNode)
                         }
                     }
@@ -324,28 +352,49 @@ class Cleaner {
         }
     }
 
-    cleanRecommand(isRemoved) {
+    cleanRecommend(isRemoved) {
         if (isRemoved)
             $('.thread_recommend').css('display', 'none', 'important')
         else
             $('.thread_recommend').css('cssText', 'display: block !important;')
     }
 
-    cleanBlockedPoster() {
-        let parent = this
-        this.homeCycleFuncs.push(function () {
-            let list = document.getElementsByClassName('frs-author-name-wrap')
-            if (list.length > 0) {
-                for (let item of list) {
-                    parent.blockList.forEach(function (user) {
-                        if (user === item.textContent) {
-                            let itemNode = item.parentNode.parentNode.parentNode.parentNode.parentNode
-                            itemNode.parentNode.removeChild(itemNode)
+
+    // 主动触发清除
+    cleanImmediately() {
+        if (window.location.href.includes('tieba.baidu.com/f')) {
+            this.homeCycleFuncs.forEach(func => func())
+        }
+        if (window.location.href.includes('tieba.baidu.com/p')) {
+            this.postCycleFuncs.forEach(func => func())
+            this.replyCycleFuncs.forEach(func => func(document))
+        }
+    }
+
+    addBlockButton() {
+        document.addEventListener('DOMNodeInserted', (e) => {
+            if (e.target.classList && e.target.classList.contains('card_headinfo_wrap')) {
+                const wrap = e.target.children[2];
+                const card = wrap.parentNode.parentNode;
+                const un = wrap.children[0].dataset.username;
+                const btn = document.createElement('a');
+                btn.innerHTML = '拉黑';
+                btn.classList.add('btn-small');
+                btn.classList.add('btn-default');
+                btn.onclick = () => {
+                    const userName = card.querySelector('.userinfo_username').textContent
+                    chrome.storage.sync.get('list', s => {
+                        if (!s.list.includes(userName)) {
+                            s.list.push(userName)
+                            chrome.storage.sync.set({ list: s.list }, () => {
+                                this.cleanImmediately()
+                            })
                         }
                     })
                 }
+                wrap.insertBefore(btn, wrap.children[0]);
             }
-        })
+        });
     }
 }
 

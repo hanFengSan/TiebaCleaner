@@ -47,7 +47,6 @@
         methods: {
             //添加屏蔽列表项
             submit: function() {
-                console.log(this.baiduName);
                 this.baiduName = this.baiduName.trim();
                 if (this.baiduName == '')
                     return;
