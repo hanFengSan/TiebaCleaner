@@ -1,5 +1,3 @@
-import HtmlParser from 'htmlparser2'
-
 class Cleaner {
     constructor() {
         console.log('TiebaCleaner constructed')
