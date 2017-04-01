@@ -128,14 +128,16 @@ class Cleaner {
                     if (postList) {
                         const clean = () => this.postCycleFuncs.forEach(func => func())
                         const observe = mo => mo.observe(postList, { childList: true })
-                        const observer = new MutationObserver((records, mo) => {
-                            mo.disconnect()
+                        const run = mo => {
                             clean()
                             this.watchPostItem()
                             observe(mo)
+                        }
+                        const observer = new MutationObserver((records, mo) => {
+                            mo.disconnect()
+                            run(mo)
                         });
-                        observe(observer)
-                        clean()
+                        run(observer)
                     }
                 });
         }
@@ -149,7 +151,10 @@ class Cleaner {
             if(!item.hasAttribute('cleaner-watch')) {
                 const clean = () => this.replyCycleFuncs.forEach(func => func(item))
                 const observe = mo => mo.observe(item, { childList: true, subtree: true })
-                let timer = null
+                const run = mo => {
+                    clean()
+                    observe(mo)
+                }
                 const observer = new MutationObserver((records, mo) => {
                     // 通过判断mutation里的特定楼中楼插入/更新关键词来过滤出关键操作
                     if (records.find(r => {
@@ -158,12 +163,10 @@ class Cleaner {
                             })
                         })) {
                         mo.disconnect()
-                        clean()
-                        observe(mo)
+                        run(mo)
                     }
                 });
-                observe(observer)
-                clean();
+                run(observer)
                 item.setAttribute('cleaner-watch', '')
             }
         });
