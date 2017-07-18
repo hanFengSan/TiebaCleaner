@@ -71,6 +71,7 @@ class Cleaner {
             this.blockUserInPost()
             this.blockUserInReply()
             this.addBlockButton()
+            this.blockUnrelatedPost()
         }
 
         this.isSet = true
@@ -200,6 +201,21 @@ class Cleaner {
                     if (blockMap.get((item.textContent))) {
                         this.hideNode(item.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode, 'blocked-list-user')
                     }
+                }
+            }
+        })
+    }
+
+    // 屏蔽非本吧帖子, 解决贴吧乱跳问题
+    blockUnrelatedPost() {
+        this.homeCycleFuncs.push(() => {
+            let list = document.querySelectorAll('.threadlist_title')
+            for (let post of list) {
+                if (!post.classList.contains('blocked-unrelated-post-title') && post.querySelector('a').href.includes('fid=')) {
+                    console.log('屏蔽乱跳帖子: ' + post.querySelector('a').title)
+                    console.log(post.querySelector('a').href)
+                    post.classList.add('blocked-unrelated-post-title')
+                    this.hideNode(post.parentNode.parentNode.parentNode.parentNode, 'blocked-unrelated-post')
                 }
             }
         })

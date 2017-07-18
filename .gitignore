@@ -7,3 +7,6 @@ node_modules
 .vscode
 dist
 publish_output
+.DS_Store
+*.crx
+*.pem
