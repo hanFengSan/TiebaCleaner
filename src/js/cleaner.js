@@ -195,18 +195,21 @@ class Cleaner {
             const blockMap = new Map(this.blockList.map(i => {
                 return [i, true]
             }))
-            let list = document.getElementsByClassName('frs-author-name-wrap')
+            let list = document.getElementsByClassName('frs-author-name-wrap');
             if (list.length > 0) {
                 for (let item of list) {
-                    if (blockMap.get((item.textContent))) {
-                        this.hideNode(item.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode, 'blocked-list-user')
+                    if (item.children.length > 0) {
+                        let name = JSON.parse(item.children[0].attributes['data-field'].value).un;
+                        if (blockMap.get((name))) {
+                            this.hideNode(item.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode, 'blocked-list-user');
+                        }
                     }
                 }
             }
         })
     }
 
-    // 屏蔽非本吧帖子, 解决贴吧乱跳问题
+    // 屏蔽多吧发表的帖子, 解决贴吧乱跳问题
     blockUnrelatedPost() {
         this.homeCycleFuncs.push(() => {
             let list = document.querySelectorAll('.threadlist_title')
@@ -228,10 +231,11 @@ class Cleaner {
                 return [i, true]
             }))
             // 清理楼层
-            for (let name of document.querySelectorAll('.p_author_name')) {
-                if (blockMap.get(name.innerHTML.trim())) {
-                    let node = name.parentNode.parentNode.parentNode.parentNode
-                    this.hideNode(name.parentNode.parentNode.parentNode.parentNode, 'blocked-post-user')
+            for (let nameDiv of document.querySelectorAll('.p_author_name')) {
+                let trueName = JSON.parse(nameDiv.attributes['data-field'].value).un;
+                if (blockMap.get(trueName)) {
+                    let node = nameDiv.parentNode.parentNode.parentNode.parentNode
+                    this.hideNode(nameDiv.parentNode.parentNode.parentNode.parentNode, 'blocked-post-user')
                 }
             }
         })
@@ -244,8 +248,9 @@ class Cleaner {
                 return [i, true]
             }))
             // 清理楼中楼
-            for (let replayItem of node.querySelectorAll('.j_user_card')) {
-                if (blockMap.get(replayItem.innerHTML.trim())) {
+            for (let replayItem of node.querySelectorAll('.at.j_user_card')) {
+                let trueName = replayItem.attributes['username'].value;
+                if (blockMap.get(trueName)) {
                     let node = replayItem.parentNode.parentNode
                     this.hideNode(replayItem.parentNode.parentNode, 'blocked-replay-user')
                 }
@@ -388,28 +393,48 @@ class Cleaner {
         }
     }
 
+    // 用户名片添加屏蔽按钮
     addBlockButton() {
         document.addEventListener('DOMNodeInserted', (e) => {
             if (e.target.classList && e.target.classList.contains('card_headinfo_wrap')) {
-                const wrap = e.target.children[2];
-                const card = wrap.parentNode.parentNode;
-                const un = wrap.children[0].dataset.username;
-                const btn = document.createElement('a');
-                btn.innerHTML = '拉黑';
-                btn.classList.add('btn-small');
-                btn.classList.add('btn-default');
-                btn.onclick = () => {
-                    const userName = card.querySelector('.userinfo_username').textContent
-                    chrome.storage.sync.get('list', s => {
-                        if (!s.list.includes(userName)) {
-                            s.list.push(userName)
-                            chrome.storage.sync.set({ list: s.list }, () => {
-                                this.cleanImmediately()
-                            })
-                        }
-                    })
-                }
-                wrap.insertBefore(btn, wrap.children[0]);
+                // setTimeout以延后dom处理, 否则会和原网站的js代码有冲突
+                setTimeout(() => {
+                    // 添加拉黑按钮
+                    let wrap = e.target.children[2];
+                    let un = wrap.children[0].dataset.username;
+                    let btn = document.createElement('a');
+                    btn.innerHTML = '拉黑';
+                    btn.classList.add('btn-small');
+                    btn.classList.add('btn-default');
+                    // 添加真名
+                    let cardContainer = document.querySelector('#user_visit_card');
+                    let trueName = decodeURI(cardContainer.querySelector('.j_avatar').attributes['href'].value).match(/un=(.*?)&/)[1];
+                    let nameContainer = cardContainer.querySelector('.card_userinfo_middle');
+                    let trueNameDiv = document.createElement('div');
+                    trueNameDiv.style = "position: absolute; bottom: -1px; left: 18px; opacity: 0.8";
+                    trueNameDiv.innerHTML = `真名: ${trueName}`;
+                    nameContainer.appendChild(trueNameDiv);
+                    // 拉黑按钮响应
+                    btn.onclick = () => {
+                        chrome.storage.sync.get('list', s => {
+                            // 如果列表未初始化, 则初始化先
+                            if (!s.list) {
+                                s.list = [];
+                            }
+                            if (trueName != '') {
+                                if (!s.list.includes(trueName)) {
+                                    s.list.push(trueName)
+                                    chrome.storage.sync.set({ list: s.list }, () => {
+                                        this.cleanImmediately()
+                                    })
+                                }
+                            } else {
+                                alert('拉黑失败! 请确保用户名片左下角的真名已识别出来, 可以移开鼠标重新打开用户名片重试');
+                            }
+                        });
+                    }
+                    wrap.insertBefore(btn, wrap.children[0]);
+                }, 0);
             }
         });
     }

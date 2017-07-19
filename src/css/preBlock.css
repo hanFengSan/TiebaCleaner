@@ -31,6 +31,8 @@
 #pop_frame, /*右下通知框*/
 .gift-goin, /*贴吧头图右侧礼物icon*/
 .app_download_box, /*贴吧客户端下载*/
+.head_ad_tag,
+.marriage, /*个人名片-像TA求婚*/
 .hover_btn {
     display: none !important;
 }
@@ -51,4 +53,10 @@
 
 .pack-up {
     max-height: 0;
+}
+
+/*修复贴吧头的间距*/
+.card_top_theme,
+.card_top_wrap {
+    margin-top: 0 !important;
 }
