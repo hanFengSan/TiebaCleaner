@@ -232,10 +232,14 @@ class Cleaner {
             }))
             // 清理楼层
             for (let nameDiv of document.querySelectorAll('.p_author_name')) {
-                let trueName = JSON.parse(nameDiv.attributes['data-field'].value).un;
-                if (blockMap.get(trueName)) {
-                    let node = nameDiv.parentNode.parentNode.parentNode.parentNode
-                    this.hideNode(nameDiv.parentNode.parentNode.parentNode.parentNode, 'blocked-post-user')
+                try {
+                    let trueName = JSON.parse(nameDiv.attributes['data-field'].value).un;
+                    if (blockMap.get(trueName)) {
+                        let node = nameDiv.parentNode.parentNode.parentNode.parentNode
+                        this.hideNode(nameDiv.parentNode.parentNode.parentNode.parentNode, 'blocked-post-user')
+                    }
+                } catch(e) {
+                    console.log(nameDiv);
                 }
             }
         })
@@ -364,8 +368,8 @@ class Cleaner {
                             this.hideNode(item.parentNode.parentNode.parentNode)
                         }
                     }
-                    for (let item of $('.core_reply')) {
-                        if (item.innerHTML.includes('<span class="label_text">广告</span>')) {
+                  for (let item of document.querySelectorAll('.core_reply')) {
+                        if (item.textContent.trim() === '广告') {
                             this.hideNode(item.parentNode.parentNode)
                         }
                     }
