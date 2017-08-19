@@ -121,6 +121,23 @@ class Cleaner {
         });
     }
 
+    findNodeParent(node, parentClassList) {
+        while (node.parentNode) {
+            let result = true;
+            for (let i of parentClassList) {
+                if (!node.parentNode.classList || !node.parentNode.classList.contains(i)) {
+                    result = false;
+                }
+            }
+            if (result) {
+                return node.parentNode;
+            } else {
+                node = node.parentNode;
+            }
+        }
+        return null;
+    }
+
     // 帖子检测变动循环
     postCycle() {
         if (window.location.href.includes('tieba.baidu.com/p')) {
@@ -326,17 +343,25 @@ class Cleaner {
             $('.head_ad_pop').css('cssText', 'display: block !important;')
     }
 
+    // 屏蔽广告帖子
     cleanAdPost(isRemoved) {
         if (isRemoved) {
             this.homeCycleFuncs.push(() => {
-                let list = document.querySelectorAll('.threadlist_rep_num')
+                let list = document.querySelectorAll('.label_text')                
                 if (list.length > 0) {
                     for (let item of list) {
-                        if (item.innerHTML == '广告' || item.innerHTML == '热门') {
-                            this.hideNode(item.parentNode.parentNode.parentNode)
-                        }
+                        this.hideNode(this.findNodeParent(item, ['t_con']).parentNode)
                     }
-                }
+                }    
+                // 过时广告样式
+                // let list = document.querySelectorAll('.threadlist_rep_num')
+                // if (list.length > 0) {
+                //     for (let item of list) {
+                //         if (item.innerHTML == '广告' || item.innerHTML == '热门') {
+                //             this.hideNode(item.parentNode.parentNode.parentNode)
+                //         }
+                //     }
+                // }
             })
         }
     }
