@@ -350,7 +350,10 @@ class Cleaner {
                 let list = document.querySelectorAll('.label_text')                
                 if (list.length > 0) {
                     for (let item of list) {
-                        this.hideNode(this.findNodeParent(item, ['t_con']).parentNode)
+                        let target = this.findNodeParent(item, ['t_con'])
+                        if (target) {
+                            this.hideNode(this.findNodeParent(item, ['t_con']).parentNode)
+                        }
                     }
                 }    
                 // 过时广告样式
