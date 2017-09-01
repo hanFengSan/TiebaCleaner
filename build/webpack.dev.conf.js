@@ -4,6 +4,8 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin')
 const path = require('path')
 const srcPath = './src'
 const buildPath = '/build'
+const FlowBabelWebpackPlugin = require('flow-babel-webpack-plugin');
+const GenerateJsonPlugin = require('generate-json-webpack-plugin');
 
 function resolve(dir) {
     return path.join(__dirname, '..', dir)
@@ -15,8 +17,8 @@ module.exports = {
     devtool: 'eval-source-map',
 
     entry: {
-        main:  '../src/js/main.js',
-        popup: '../src/js/popup.js'
+        main:  '../src/main.inject.js',
+        popup: '../src/main.popup.js'
     },
     output: {
         path: path.resolve(__dirname, '../dist'),
@@ -33,7 +35,8 @@ module.exports = {
                 exclude: /node_modules/,
                 loader: 'babel',
                 query: {
-                    presets: ['es2015']
+                    presets: ['flow', 'es2015', 'stage-0'],
+                    plugins: ['transform-class-properties', 'transform-flow-comments']
                 }
             },
             {
@@ -101,7 +104,10 @@ module.exports = {
         new webpack.ProvidePlugin({
             $: 'jquery',
             jQuery: 'jquery'
-        })
+        }),
+        // flow check in webpack
+        new FlowBabelWebpackPlugin(),
+        // generate manifest.json
+        new GenerateJsonPlugin('manifest.json', require(resolve('src/manifest.js')))      
     ]
-
 }

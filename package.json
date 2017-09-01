@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "gulp dev --gulpfile build/gulpfile.js",
     "build": "gulp build --gulpfile build/gulpfile.js",
-    "publish": "gulp publish --gulpfile build/gulpfile.js"
+    "publish": "gulp publish --gulpfile build/gulpfile.js",
+    "check": "flow check"
   },
   "author": "",
   "license": "ISC",
@@ -46,7 +47,21 @@
     "webpack-dev-server": "^1.15.1"
   },
   "dependencies": {
+    "babel-eslint": "^7.0.0",
+    "babel-plugin-transform-class-properties": "^6.24.1",
+    "babel-preset-flow": "^6.23.0",
     "del": "^2.2.2",
+    "eslint": "^3.7.1",
+    "eslint-config-standard": "^6.1.0",
+    "eslint-friendly-formatter": "^2.0.5",
+    "eslint-loader": "^1.5.0",
+    "eslint-plugin-flowtype": "^2.35.0",
+    "eslint-plugin-html": "^1.3.0",
+    "eslint-plugin-promise": "^3.4.0",
+    "eslint-plugin-standard": "^2.0.1",
+    "flow-babel-webpack-plugin": "^1.1.0",
+    "flow-bin": "^0.53.1",
+    "generate-json-webpack-plugin": "^0.2.2",
     "gulp": "^3.9.1",
     "gulp-util": "^3.0.8",
     "htmlparser2": "^3.9.2",

@@ -28,7 +28,7 @@ gulp.task('dev', ['assets'], function() {
 });
 
 gulp.task('build', ['assets'], function() {
-    return gulp.src('../src/js/main.js')
+    return gulp.src('../src/main.inject.js')
         .pipe(webpackStream(require('./webpack.prod.conf.js'), webpack))
         .pipe(gulp.dest('../dist/'));
 });
