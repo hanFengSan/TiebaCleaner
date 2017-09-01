@@ -65,6 +65,7 @@
     "gulp": "^3.9.1",
     "gulp-util": "^3.0.8",
     "htmlparser2": "^3.9.2",
+    "jshint": "^2.9.5",
     "vue": "^1.0.26",
     "vue-carbon": "^0.4.2",
     "vuex": "^1.0.0-rc.2",
