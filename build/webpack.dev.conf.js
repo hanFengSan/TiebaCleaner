@@ -35,8 +35,8 @@ module.exports = {
                 exclude: /node_modules/,
                 loader: 'babel',
                 query: {
-                    presets: ['flow', 'es2015', 'stage-0'],
-                    plugins: ['transform-class-properties', 'transform-flow-comments']
+                    presets: ['es2015', 'stage-0'],
+                    plugins: ['transform-class-properties']
                 }
             },
             {
