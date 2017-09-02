@@ -10,9 +10,7 @@ gulp.task('clean', function() {
 });
 
 gulp.task('assets', ['clean'], function() {
-    gulp.src('../src/manifest.json')
-        .pipe(gulp.dest('../dist/'));
-    gulp.src('../src/css/preBlock.css')
+    gulp.src('../src/core/style/style.css')
         .pipe(gulp.dest('../dist/'));
     gulp.src('../src/assets/img/*')
         .pipe(gulp.dest('../dist/img'));

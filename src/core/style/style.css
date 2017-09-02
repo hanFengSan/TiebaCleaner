@@ -1,0 +1,62 @@
+/*
+@author: Alex Chen
+@intro: 附加样式
+*/
+
+/*此样式表用于屏蔽广告。因为js代码运行速度太慢，为了尽可能的快速屏蔽，先在样式中默认屏蔽广告，再在js代码中判断是否需要显示*/
+.img_wrap,
+.firework-wrap,
+.tbui_aside_float_bar,
+.topic_list_box,
+#video_frs_head,
+.my_app,
+.celebrity,
+#pagelet_frs-header\/pagelet\/head_content_middle,
+.head_ad_pop,
+.iframe_wrapper,
+.novel-ranking-frs-body, /*百度小说人气榜*/
+.thread_recommend,
+#video_aside, /*视频推荐*/
+#tieba-notice, /*贴吧警示*/
+.plat_head_v2_unmain_wrapper, /*b吧头*/
+.u9_aside, /*热门卡包*/
+#duoku_servers_list_wrapper, /*游戏列表*/
+.forbid-speech-banner, /*提示禁止条*/
+.save_face_bg, /*回复右上角挽尊标识*/
+#pb_adbanner, /*帖子内部顶条广告*/
+.app_iframe, /*百度小说贴吧吧顶部的最新排行,捧场动态, 读者贡献榜*/
+.live_show_aside, /*宅男杀手*/
+.app_forum_top_nav_join_vip, /*会员官网*/
+#global_notice_wrap, /*底部通知条*/
+#pop_frame, /*右下通知框*/
+.gift-goin, /*贴吧头图右侧礼物icon*/
+.app_download_box, /*贴吧客户端下载*/
+.head_ad_tag,
+.marriage, /*个人名片-像TA求婚*/
+.hover_btn {
+    display: none !important;
+}
+
+/*修复顶部广告消失后的无间隔问题*/
+.card_top_wrap {
+	margin-top: 50px;
+}
+
+/*删除帖子时的过渡动画*/
+.pack-up-transition {
+    transition: max-height 10s ease;
+}
+
+.pre-pack-up {
+    max-height: 500px;
+}
+
+.pack-up {
+    max-height: 0;
+}
+
+/*修复贴吧头的间距*/
+.card_top_theme,
+.card_top_wrap {
+    margin-top: 0 !important;
+}

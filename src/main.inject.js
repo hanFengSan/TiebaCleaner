@@ -1,12 +1,5 @@
 // @flow
-import Manifest from './manifest'
+import Core from './core'
 
-class Person {
-    static name = Manifest.name
-}
-
-function foo(x: ? number): Person {
-    return new Person();
-}
-
-console.log(foo());
+const core = new Core();
+core.run();

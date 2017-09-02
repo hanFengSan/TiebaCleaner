@@ -27,7 +27,7 @@ module.exports = {
             'main.js'
         ],
         css: [
-            'preBlock.css'
+            'style.css'
         ],
         run_at: 'document_start'
     }]

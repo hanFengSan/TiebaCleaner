@@ -13,11 +13,11 @@ function resolve(dir) {
 
 module.exports = {
     watch: true,
-    
+
     devtool: 'eval-source-map',
 
     entry: {
-        main:  '../src/main.inject.js',
+        main: '../src/main.inject.js',
         popup: '../src/main.popup.js'
     },
     output: {
@@ -94,10 +94,16 @@ module.exports = {
         }
     },
 
+    resolve: {
+        alias: {
+            'src': resolve('src'),
+        }
+    },
+
     plugins: [
         new HtmlWebpackPlugin({
             filename: 'popup.html',
-            template:  resolve('src/popup.tmpl.html'),
+            template: resolve('src/popup.tmpl.html'),
             excludeChunks: ['main']
         }),
         // new ExtractTextPlugin('[name].css'),
@@ -108,6 +114,6 @@ module.exports = {
         // flow check in webpack
         new FlowBabelWebpackPlugin(),
         // generate manifest.json
-        new GenerateJsonPlugin('manifest.json', require(resolve('src/manifest.js')))      
+        new GenerateJsonPlugin('manifest.json', require(resolve('src/manifest.js')))
     ]
 }
