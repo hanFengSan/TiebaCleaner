@@ -4,7 +4,6 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin')
 const path = require('path')
 const srcPath = './src'
 const buildPath = '/build'
-const FlowBabelWebpackPlugin = require('flow-babel-webpack-plugin');
 const GenerateJsonPlugin = require('generate-json-webpack-plugin');
 
 function resolve(dir) {
@@ -36,7 +35,7 @@ module.exports = {
                 loader: 'babel',
                 query: {
                     presets: ['es2015', 'stage-0'],
-                    plugins: ['transform-class-properties']
+                    plugins: ['transform-class-properties', 'transform-async-to-generator']
                 }
             },
             {
@@ -111,8 +110,6 @@ module.exports = {
             $: 'jquery',
             jQuery: 'jquery'
         }),
-        // flow check in webpack
-        new FlowBabelWebpackPlugin(),
         // generate manifest.json
         new GenerateJsonPlugin('manifest.json', require(resolve('src/manifest.js')))
     ]

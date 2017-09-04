@@ -1,5 +1,6 @@
 // @flow
-import Core from './core'
+import Cleaner from './core/Cleaner'
 
-const core = new Core();
-core.run();
+console.log('TiebaCleaner running');
+const cleaner = new Cleaner();
+cleaner.run();
