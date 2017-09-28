@@ -1,11 +1,12 @@
-import Vue from 'vue'
-import VueResource from 'vue-resource'
-import App from './views/app.popup.vue'
-// import MuseUI from 'muse-ui'
-// import 'src/style/muse-ui/index.less'
+import Vue from 'vue';
+import VueResource from 'vue-resource';
+import App from './views/app.popup.vue';
+import MuseUI from 'muse-ui';
+import './views/styles/muse-ui/index.less';
+import 'material-design-icons';
 
-Vue.use(VueResource)
-// Vue.use(MuseUI)
+Vue.use(VueResource);
+Vue.use(MuseUI);
 
 /* eslint-disable no-unused-vars */
 const app = new Vue({
