@@ -401,6 +401,9 @@ class Cleaner {
                             this.hideNode(item.parentNode.parentNode)
                         }
                     }
+                  for (let item of document.querySelectorAll('.ad_bottom_view')) {
+                        this.hideNode(item.parentNode.parentNode)
+                    }
                 }
             })
         }
