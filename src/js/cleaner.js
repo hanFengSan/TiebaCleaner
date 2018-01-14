@@ -391,18 +391,18 @@ class Cleaner {
         if (isRemoved) {
             this.postCycleFuncs.push(() => {
                 if ($('.l_post').length > 0) {
-                    for (let item of $('.core_reply_tail')) {
-                        if (item.innerHTML.includes('广告')) {
-                            this.hideNode(item.parentNode.parentNode.parentNode)
-                        }
-                    }
-                  for (let item of document.querySelectorAll('.core_reply')) {
-                        if (item.textContent.trim() === '广告') {
-                            this.hideNode(item.parentNode.parentNode)
-                        }
-                    }
+                //     for (let item of $('.core_reply_tail')) {
+                //         if (item.innerHTML.includes('广告')) {
+                //             this.hideNode(item.parentNode.parentNode.parentNode)
+                //         }
+                //     }
+                //   for (let item of document.querySelectorAll('.core_reply')) {
+                //         if (item.textContent.trim() === '广告') {
+                //             this.hideNode(item.parentNode.parentNode)
+                //         }
+                //     }
                   for (let item of document.querySelectorAll('.ad_bottom_view')) {
-                        this.hideNode(item.parentNode.parentNode)
+                        this.hideNode(this.findNodeParent(item, ['l_post']))
                     }
                 }
             })
