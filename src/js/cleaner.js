@@ -1,3 +1,5 @@
+import { setPartlyList, getPartlyList } from './storage';
+
 class Cleaner {
     constructor() {
         console.log('TiebaCleaner constructed')
@@ -450,23 +452,17 @@ class Cleaner {
                     trueNameDiv.innerHTML = `真名: ${trueName}`;
                     nameContainer.appendChild(trueNameDiv);
                     // 拉黑按钮响应
-                    btn.onclick = () => {
-                        chrome.storage.sync.get('list', s => {
-                            // 如果列表未初始化, 则初始化先
-                            if (!s.list) {
-                                s.list = [];
+                    btn.onclick = async () => {
+                        if (trueName !== '') {
+                            let list = await getPartlyList('blockList');
+                            console.log(list);
+                            if (!list.includes(trueName)) {
+                                list.push(trueName);
+                                this.blockList.push(trueName);
+                                await setPartlyList('blockList', list);
+                                this.cleanImmediately();
                             }
-                            if (trueName != '') {
-                                if (!s.list.includes(trueName)) {
-                                    s.list.push(trueName)
-                                    chrome.storage.sync.set({ list: s.list }, () => {
-                                        this.cleanImmediately()
-                                    })
-                                }
-                            } else {
-                                alert('拉黑失败! 请确保用户名片左下角的真名已识别出来, 可以移开鼠标重新打开用户名片重试');
-                            }
-                        });
+                        }
                     }
                     wrap.insertBefore(btn, wrap.children[0]);
                 }, 0);

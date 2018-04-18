@@ -23,6 +23,8 @@
 </template>
 
 <script>
+    import { get, remove, setPartlyList, getPartlyList } from '../storage';
+
     export default {
         data() {
             return {
@@ -32,21 +34,20 @@
             }
         },
 
-        created: function() {
-            //加载
-            let list = this.list;
-            chrome.storage.sync.get('list', function(data) {
-                if (data.list != undefined) {
-                    for (let item of data.list) {
-                        list.push(item);
-                    }
-                }
-            });
+        created: async function() {
+            let list = await get('list');
+            if (list) {
+                list = [].concat(await getPartlyList('blockList'), list);
+                list = [...new Set(list)];
+                await setPartlyList('blockList', list);
+                await remove('list');
+            }
+            this.list = await getPartlyList('blockList');
         },
 
         methods: {
             //添加屏蔽列表项
-            submit: function() {
+            submit: async function() {
                 this.baiduName = this.baiduName.trim();
                 if (this.baiduName == '')
                     return;
@@ -59,23 +60,13 @@
                 if (!isExisted) {
                     this.list.push(this.baiduName);
                     this.baiduName = '';
-                    this.saveChanges(this.list);
+                    await setPartlyList('blockList', this.list.concat());
                 }
             },
-            //保存修改，类型为可同步类型
-            saveChanges: function(list) {
-                // 使用 Chrome 扩展程序的存储 API 保存它。
-                chrome.storage.sync.set({
-                    'list': list
-                }, function() {
-                    console.log('设置已保存');
-                });
-            },
             //移除屏蔽列表项
-            remove: function(index) {
+            remove: async function(index) {
                 this.list.splice(index, 1);
-                // console.log('delete');
-                this.saveChanges(this.list);
+                setPartlyList('blockList', this.list.concat());
             }
         }
     }

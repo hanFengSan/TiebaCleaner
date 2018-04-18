@@ -1,8 +1,9 @@
 // 此部分代码将会注入到贴吧页面中
 import Cleaner from './cleaner'
 import Utils from './utils.js'
+import { get, remove, setPartlyList, getPartlyList } from './storage';
 
-var blockList = [] // 屏蔽列表
+// 屏蔽列表
 var html = document.documentElement.innerHTML // 用于检查是否需要刷新
 
 const cleaner = new Cleaner()
@@ -35,17 +36,19 @@ chrome.storage.sync.get('adOptions', function (data) {
   }
 })
 
-// 读取block列表
-chrome.storage.sync.get('list', function (data) {
-  if (data.list != undefined) {
-    for (let item of data.list) {
-      blockList.push(item)
+async function init() {
+    let list = await get('list');
+    if (list) {
+        list = [].concat(await getPartlyList('blockList'), list);
+        list = [...new Set(list)];
+        await setPartlyList('blockList', list);
+        await remove('list');
     }
-    cleaner.blockList = data.list
-  // 执行初次block配置
-  // clean()
-  }
-})
+    cleaner.blockList = await getPartlyList('blockList');
+    cleaner.cleanImmediately();
+}
+
+init();
 
 // 监听clean列表的变化
 chrome.storage.onChanged.addListener(function (changes, namespace) {
