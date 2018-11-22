@@ -33,6 +33,10 @@
 .app_download_box, /*贴吧客户端下载*/
 .head_ad_tag,
 .marriage, /*个人名片-像TA求婚*/
+.showlist_wap, /*屏蔽热门直播*/
+.showlist_wap-fixed, /*屏蔽热门直播*/
+.tieba-hotlist-box, /*屏蔽热门直播*/
+.nani_app_download_box, /*屏蔽nani小视频*/
 .hover_btn {
     display: none !important;
 }
